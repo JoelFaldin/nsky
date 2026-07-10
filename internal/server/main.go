@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net"
+	"nsky/internal/protocol"
 	"sync"
 )
 
@@ -18,6 +19,7 @@ var (
 
 func main() {
 	go listenControl()
+	listenPublic()
 }
 
 // Accepts an incoming request from ngrok lite
