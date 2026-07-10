@@ -19,6 +19,7 @@ var (
 
 func main() {
 	go listenControl()
+	go listenJoin()
 	listenPublic()
 }
 
@@ -90,4 +91,27 @@ func listenPublic() {
 			log.Println("[control] Couldnt report to client:", err)
 		}
 	}
+}
+
+func listenJoin() {
+	ln, err := net.Listen("tcp", ":4444")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	log.Println("[join] Listening on :4444!")
+
+	for {
+		conn, err := ln.Accept()
+		if err != nil {
+			log.Println("[join] Accept error:", err)
+			continue
+		}
+
+		go handleJoin(conn)
+	}
+}
+
+func handleJoin(conn net.Conn) {
+
 }
