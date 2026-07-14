@@ -1,6 +1,7 @@
-package main
+package server
 
 import (
+	"bufio"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -113,5 +114,11 @@ func listenJoin() {
 }
 
 func handleJoin(conn net.Conn) {
+	reader := bufio.NewReader(conn)
+	line, err := reader.ReadString('\n')
+	if err != nil {
+		log.Println("[handle] Error when reading:", err)
+	}
 
+	fmt.Printf("[handle] Reading %q\n", line)
 }
