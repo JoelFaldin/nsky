@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net"
+	"nsky/internal"
 	"nsky/internal/protocol"
 )
 
@@ -49,6 +50,5 @@ func handleNewConn(id, join, local string) {
 	}
 
 	log.Println("Stream ", id, " -> proxing towards ", local)
-	pipe(joinConn, localConn)
-
+	internal.Pipe(joinConn, localConn)
 }
