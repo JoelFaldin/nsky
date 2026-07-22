@@ -5,7 +5,13 @@ import (
 	"net"
 )
 
-func Pipe(join, local net.Conn) {
-	go func() { io.Copy(join, local) }
-	go func() { io.Copy(local, join) }
+func Pipe(a, b net.Conn) {
+	channel := make(chan struct{}, 2)
+
+	go func() { io.Copy(a, b); channel <- struct{}{} }()
+	go func() { io.Copy(b, a); channel <- struct{}{} }()
+	<-channel
+
+	a.Close()
+	b.Close()
 }
