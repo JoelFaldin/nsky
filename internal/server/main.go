@@ -15,7 +15,7 @@ var (
 	controlEnc *json.Encoder
 
 	pendingMu sync.Mutex
-	pending   = map[string]net.Conn{}
+	pending   = map[string]chan net.Conn{}
 )
 
 func main() {
@@ -79,8 +79,9 @@ func listenPublic() {
 		counter++
 		id := fmt.Sprintf("%d", counter)
 
+		ch := make(chan net.Conn)
 		pendingMu.Lock()
-		pending[id] = visitor
+		pending[id] = ch
 		pendingMu.Unlock()
 
 		log.Println("[public] Visitor", visitor.RemoteAddr(), "-> id", id)
@@ -120,5 +121,15 @@ func handleJoin(conn net.Conn) {
 		log.Println("[handle] Error when reading:", err)
 	}
 
-	fmt.Printf("[handle] Reading %q\n", line)
+	pendingMu.Lock()
+	ch, ok := pending[line]
+	delete(pending, line)
+	pendingMu.Unlock()
+
+	if !ok {
+		conn.Close()
+		return
+	}
+
+	ch <- conn
 }
