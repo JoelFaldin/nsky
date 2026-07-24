@@ -27,7 +27,7 @@ func main() {
 
 		switch msg.Type {
 		case "new_conn":
-			go handleNewConn(msg.ID, "3000:4444", "3000")
+			go handleNewConn(msg.ID, ":4444", ":3000")
 		default:
 			log.Println("[client] Unknown message:", msg.Type)
 		}
@@ -37,14 +37,14 @@ func main() {
 func handleNewConn(id, join, local string) {
 	joinConn, err := net.Dial("tcp", join)
 	if err != nil {
-		log.Fatalf("Couldnt open join conn: %v", err)
+		log.Fatalf("[client] Couldnt open join conn: %v", err)
 	}
 
 	fmt.Fprintf(joinConn, "%s\n", id)
 
 	localConn, err := net.Dial("tcp", local)
 	if err != nil {
-		log.Println("Couldnt connect to local app: ", err)
+		log.Println("[client] Couldnt connect to local app: ", err)
 		joinConn.Close()
 		return
 	}

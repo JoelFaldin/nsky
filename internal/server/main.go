@@ -40,7 +40,7 @@ func listenControl() {
 			continue
 		}
 
-		log.Println("[control] Client connected from ", conn.RemoteAddr())
+		log.Println("[control] Client connected from", conn.RemoteAddr())
 
 		controlMu.Lock()
 		controlEnc = json.NewEncoder(conn)
