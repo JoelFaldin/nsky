@@ -7,7 +7,10 @@ import (
 	"log"
 	"net"
 	"nsky/internal/protocol"
+	"nsky/internal/utils"
+	"strings"
 	"sync"
+	"time"
 )
 
 var (
@@ -91,6 +94,16 @@ func listenPublic() {
 		controlMu.Unlock()
 		if err != nil {
 			log.Println("[control] Couldnt report to client:", err)
+			return
+		}
+
+		select {
+		case joinConn := <-ch:
+			defer joinConn.Close()
+			utils.Proxy(visitor, joinConn)
+		case <-time.After(10 * time.Second):
+			log.Println("[public] Timeout waiting for join to id: ", id)
+			return
 		}
 	}
 }
@@ -121,12 +134,15 @@ func handleJoin(conn net.Conn) {
 		log.Println("[handle] Error when reading:", err)
 	}
 
+	line = strings.TrimSpace(line)
+
 	pendingMu.Lock()
 	ch, ok := pending[line]
 	delete(pending, line)
 	pendingMu.Unlock()
 
 	if !ok {
+		log.Println("[handle] Couldnt find id ", line)
 		conn.Close()
 		return
 	}
