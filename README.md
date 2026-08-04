@@ -65,3 +65,22 @@ go run ./internal/server/main.go
 ```
 go run ./internal/client/main.go
 ```
+
+4. Run the service you want to expose:
+_(For example, a Nextjs app)_
+
+```
+npm run dev
+```
+
+5. Make a request:
+
+```
+curl -v localhost:8080
+```
+
+## Final considerations
+
+This is merely a learning project, used to learn networking concepts and concurrent programming in golang.
+
+(Dont ask me to explain the inners of the project, as I won't be able to!!)
