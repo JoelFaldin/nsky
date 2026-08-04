@@ -1,6 +1,6 @@
 # nsky
 
-A minimal recreation of ![ngrok](https://ngrok.com/) internals. Implemented using ![golang](https://go.dev/). It allows to expose a locally running app (for example, an app running on `:3000`) towards internet. No public IP or port router forwarding needed.
+A minimal recreation of [ngrok](https://ngrok.com/) internals. Implemented using [golang](https://go.dev/). It allows to expose a locally running app (for example, an app running on `:3000`) towards internet. No public IP or port router forwarding needed.
 
 _This project is a part of my systems and networks learning journey._
 
@@ -28,6 +28,7 @@ The server exposes 3 ports with different duties:
 
 ## Project Arquitecture
 
+```
 .
 ├── go.mod
 └── internal/
@@ -40,6 +41,7 @@ The server exposes 3 ports with different duties:
     └── utils/
         ├── pipe.go
         └── proxy.go
+```
 
 ## Requirements
 
